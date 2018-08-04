@@ -1,29 +1,12 @@
 <template>
   <div id="app">
-    <v-header>
-    </v-header>
-    <v-tab>
-    </v-tab>
-    <v-content>
-    </v-content>
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
     <router-view/>
   </div>
 </template>
-
-<script>
-import VHeader from '@/views/Header.vue';
-import VTab from '@/views/Tab.vue';
-import VContent from '@/views/Content.vue';
-
-export default {
-  name: 'App',
-  components: {
-    VHeader,
-    VTab,
-    VContent
-  }
-};
-</script>
 
 <style lang="scss">
 #app {

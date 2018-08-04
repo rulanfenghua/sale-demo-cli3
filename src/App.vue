@@ -1,29 +1,45 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <v-header></v-header>
+    <div id="tab">
+      <router-link to="/goods">商品</router-link>
+      <router-link to="/rating">评论</router-link>
+      <router-link to="/seller">商家</router-link>
     </div>
-    <router-view/>
+    <router-view></router-view>
   </div>
 </template>
 
+<script>
+import VHeader from '@/views/Header.vue';
+
+export default {
+  name: 'app',
+  components: {
+    VHeader
+  }
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+  #app {
+    #tab {
+      display: flex;
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      border: 1px rgba(7, 17, 27, 0.1);
+      a {
+        flex: 1;
+        text-align: center;
+        display: block;
+        font-size: 14px;
+        color: rgb(77, 85, 93);
+        &.router-link-active {
+          font-size: 14px;
+          color: rgb(240, 20, 20);
+        }
+      }
     }
   }
-}
 </style>
