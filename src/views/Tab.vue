@@ -4,9 +4,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'tab'
-  }
+export default {
+  name: 'tab'
+};
 </script>
 
 <style scoped lang="scss">
