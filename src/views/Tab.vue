@@ -1,11 +1,12 @@
 <template>
   <div class="tab">
+    Tab
   </div>
 </template>
 
 <script>
 export default {
-  name: 'tab'
+  name: 'v-tab'
 };
 </script>
 
