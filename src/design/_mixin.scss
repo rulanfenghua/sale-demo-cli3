@@ -10,3 +10,10 @@
     content: '';
   }
 }
+
+@mixin bg-image($url) {
+  background-image: url('../assets/'+$url+'@2x.png');
+  @media (min-resolution: 3) {
+    background-image: url('../assets/'+$url+'@3x.png');
+  }
+}

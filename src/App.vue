@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import VHeader from './views/Header.vue';
+import VHeader from './views/VHeader.vue';
 import axios from 'axios';
 
 export default {
