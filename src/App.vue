@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <v-header :seller="seller"></v-header>
     <div id="tab" class="border-1px">
       <router-link to="/goods">商品</router-link>
       <router-link to="/rating">评论</router-link>
@@ -11,18 +11,33 @@
 </template>
 
 <script>
-import VHeader from '@/views/Header.vue';
+import VHeader from './views/Header.vue';
+import axios from 'axios';
 
 export default {
   name: 'app',
   components: {
     VHeader
+  },
+  data() {
+    return {
+      seller: {}
+    };
+  },
+  created() {
+    axios.get('/api/seller').then((response) => {
+      // console.log(response);
+      response = response.data;
+      if (response.errno === 0) {
+        this.seller = response.data;
+      }
+    });
   }
 };
 </script>
 
 <style lang="scss">
-  @import './common/css/mixin';
+  @import './design/index.scss';
 
   #app {
     #tab {
