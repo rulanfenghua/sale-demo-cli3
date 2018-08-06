@@ -1,3 +1,9 @@
+body,
+html {
+  font-weight: 200;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 @media (min-resolution: 1.5) {
   .border-1px {
     &::after {
