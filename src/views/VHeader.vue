@@ -11,8 +11,8 @@
         </div>
         <div class="description">{{seller.description+'/'+seller.deliveryTime+'分钟送达'}}</div>
         <div class="supports" v-if="seller.supports">
-            <span class="icon" :class="iconClassMap[seller.supports[0].type]"></span>
-            <span class="text">{{seller.supports[0].description}}</span>
+          <span class="icon" :class="iconClassMap[seller.supports[0].type]"></span>
+          <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
       <div class="supports-count" v-if="seller.supports" @click="showDetail">
@@ -28,7 +28,8 @@
     <div class="background">
       <img :src="seller.avatar" alt="" width="100%" height="100%">
     </div>
-    <div v-show="detailShow" class="detail">
+    <transition>
+    <div class="detail" v-if="detailShow">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
@@ -40,8 +41,8 @@
           </div>
           <ul v-if="seller.supports" class="supports">
             <li class="support-item" v-for="item in seller.supports" :key="item.index">
-            <span class="icon" :class="iconClassMap[item.type]"></span>
-            <span class="text">{{item.description}}</span>
+              <span class="icon" :class="iconClassMap[item.type]"></span>
+              <span class="text">{{item.description}}</span>
             </li>
           </ul>
           <div class="title">
@@ -53,11 +54,12 @@
             <p class="content">{{seller.bulletin}}</p>
           </div>
         </div>
-      </div>
-      <div class="detail-close">
-        <i class="icon-close"></i>
+        <div class="detail-close" @click="hideDetail">
+          <i class="icon-close"></i>
+        </div>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -82,6 +84,9 @@ export default {
   methods: {
     showDetail() {
       this.detailShow = true;
+    },
+    hideDetail() {
+      this.detailShow = false;
     }
   },
   created() {
@@ -135,7 +140,7 @@ export default {
         }
         .supports {
           font-size: 0;
-           .icon {
+          .icon {
             display: inline-block;
             vertical-align: top;
             width: 12px;
@@ -234,12 +239,22 @@ export default {
       height: 100%;
       overflow: auto;
       background: rgba(7, 17, 27, 0.8);
+      &.v-enter-active, &.v-leave-active {
+        transition: all .5s ease;
+      }
+      &.v-enter, &.v-leave-to {
+        transform: translateY(10px);
+        opacity: 0;
+      }
       .detail-wrapper {
         min-height: 100%;
+        display: flex;
+        flex-direction: column;
         width: 100%;
         font-size: 0;
         .detail-main {
-          padding: 64px 0 64px;
+          flex: 1;
+          padding-top: 64px;
           .name {
             text-align: center;
             font-size: 16px;
@@ -319,14 +334,13 @@ export default {
             }
           }
         }
-      }
-      .detail-close {
-        position: relative;
-        width: 32px;
-        height: 32px;
-        margin: -64px auto;
-        clear: both;
-        font-size: 32px;
+        .detail-close {
+          width: 32px;
+          height: 32px;
+          margin: 0 auto 32px;
+          clear: both;
+          font-size: 32px;
+        }
       }
     }
   }
