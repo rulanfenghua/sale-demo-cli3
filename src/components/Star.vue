@@ -23,14 +23,16 @@ export default {
     },
     itemClasses() {
       let result = [];
-      let score = Math.floor(this.score * 2) / 2;
-      let hasDecimal = score % 1 !== 0;
-      let integer = Math.floor(score);
+      // let score = Math.floor(this.score * 2) / 2;
+      let integer = Math.floor(this.score);
+      let decimal = this.score % 1;
 
       for (let i = 0; i < integer; i++) {
         result.push('on');
       }
-      if (hasDecimal) {
+      if (decimal >= 2 / 3) {
+        result.push('on');
+      } else if (decimal > 1 / 3 && decimal < 2 / 3) {
         result.push('half');
       }
       while (result.length < LENGTH) {

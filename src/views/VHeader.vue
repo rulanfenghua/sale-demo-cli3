@@ -33,6 +33,25 @@
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
           <star :size="48" :score="seller.score"></star>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul v-if="seller.supports" class="supports">
+            <li class="support-item" v-for="item in seller.supports" :key="item.index">
+            <span class="icon" :class="iconClassMap[item.type]"></span>
+            <span class="text">{{item.description}}</span>
+            </li>
+          </ul>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">公司信息</div>
+            <div class="line"></div>
+          </div>
+          <div class="bulletin">
+            <p class="content">{{seller.bulletin}}</p>
+          </div>
         </div>
       </div>
       <div class="detail-close">
@@ -81,21 +100,18 @@ export default {
     overflow: hidden;
     .content-wrapper {
       position: relative;
-      // display: flex;
+      display: flex;
       padding: 24px 12px 18px 24px;
       .avatar {
-        display: inline-block;
         img {
           border-radius: 2px;
         }
       }
       .content {
-        display: inline-block;
         margin-left: 16px;
         .title {
+          font-size: 0;
           margin: 2px 0 8px;
-          font-size: 16px;
-          // display: flex;
           .brand {
             display: inline-block;
             vertical-align: top;
@@ -106,7 +122,6 @@ export default {
             background-repeat: no-repeat;
           }
           .name {
-            vertical-align: top;
             margin-left: 6px;
             font-size: 16px;
             line-height: 18px;
@@ -119,8 +134,8 @@ export default {
           margin-bottom: 10px;
         }
         .supports {
-          // display: flex;
-          .icon {
+          font-size: 0;
+           .icon {
             display: inline-block;
             vertical-align: top;
             width: 12px;
@@ -145,7 +160,6 @@ export default {
             }
           }
           .text {
-            vertical-align: top;
             line-height: 12px;
             font-size: 10px;
           }
@@ -158,13 +172,11 @@ export default {
         padding: 0 8px;
         height: 24px;
         line-height: 24px;
+        font-size: 0;
         border-radius: 14px;
         background: rgba(0, 0, 0, 0.2);
         text-align: center;
-        // display: flex;
-        // align-items: center;
         .count {
-          display: inline-block;
           font-size: 10px;
           vertical-align: middle;
         }
@@ -197,13 +209,12 @@ export default {
       .text {
         margin: 0 4px;
         font-size: 10px;
-        vertical-align: middle;
       }
       i {
         position: absolute;
         font-size: 10px;
         right: 12px;
-        bottom: 7px;
+        bottom: 8px;
       }
     }
     .background {
@@ -211,7 +222,6 @@ export default {
       top: -20%;
       right: 0;
       width: 100%;
-      // height: 100px;
       z-index: -1;
       filter: blur(10px);
     }
@@ -227,24 +237,96 @@ export default {
       .detail-wrapper {
         min-height: 100%;
         width: 100%;
+        font-size: 0;
         .detail-main {
-          margin-top: 64px;
-          padding-bottom: 64px;
+          padding: 64px 0 64px;
           .name {
-            line-height: 16px;
             text-align: center;
             font-size: 16px;
+            line-height: 16px;
             font-weight: 700;
           }
+          .star {
+            margin-top: 18px;
+            padding: 2px 0;
+            text-align: center;
+          }
+          .title {
+            display: flex;
+            width: 80%;
+            margin: 30px auto 24px;
+            .line {
+              flex: 1;
+              position: relative;
+              height: 1px;
+              top: 6px;
+              background-color: rgba(255, 255, 255, 0.2);
+            }
+            .text {
+              padding: 0 12px;
+              line-height: 14px;
+              font-size: 14px;
+              font-weight: 700;
+            }
+          }
+          .supports {
+            width: 80%;
+            margin: 0 auto;
+            .support-item {
+              padding: 0 12px;
+              margin-bottom: 12px;
+              font-size: 0;
+              &:last-child {
+                margin-bottom: 0;
+              }
+              .icon {
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                vertical-align: top;
+                background-size: 16px;
+                background-repeat: no-repeat;
+                &.decrease {
+                  @include bg-image('VHeader/decrease_2');
+                }
+                &.discount {
+                  @include bg-image('VHeader/discount_2');
+                }
+                &.guarantee {
+                  @include bg-image('VHeader/guarantee_2');
+                }
+                &.invoice {
+                  @include bg-image('VHeader/invoice_2');
+                }
+                &.special {
+                  @include bg-image('VHeader/special_2');
+                }
+              }
+              .text {
+                margin-left: 6px;
+                font-size: 12px;
+                line-height: 16px;
+              }
+            }
+          }
+          .bulletin {
+            width: 80%;
+            margin: 0 auto;
+            .content {
+              padding: 0 12px;
+              line-height: 24px;
+              font-size: 12px;
+            }
+          }
         }
-        .detail-close {
-          position: relative;
-          width: 32px;
-          height: 32px;
-          margin: -64px auto 0;
-          clear: both;
-          font-size: 32px;
-        }
+      }
+      .detail-close {
+        position: relative;
+        width: 32px;
+        height: 32px;
+        margin: -64px auto;
+        clear: both;
+        font-size: 32px;
       }
     }
   }
