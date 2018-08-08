@@ -11,7 +11,7 @@
         </div>
         <div class="description">{{seller.description+'/'+seller.deliveryTime+'分钟送达'}}</div>
         <div class="supports" v-if="seller.supports">
-          <span class="icon" :class="iconClassMap[seller.supports[0].type]"></span>
+          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
@@ -35,20 +35,20 @@
           <h1 class="name">{{seller.name}}</h1>
           <star :size="48" :score="seller.score"></star>
           <div class="title">
-            <div class="line"></div>
+            <div class="line border-1px"></div>
             <div class="text">优惠信息</div>
-            <div class="line"></div>
+            <div class="line border-1px"></div>
           </div>
           <ul v-if="seller.supports" class="supports">
-            <li class="support-item" v-for="item in seller.supports" :key="item.index">
+            <li class="support-item" v-for="(item,index) in seller.supports" :key="index">
               <span class="icon" :class="iconClassMap[item.type]"></span>
               <span class="text">{{item.description}}</span>
             </li>
           </ul>
           <div class="title">
-            <div class="line"></div>
+            <div class="line border-1px"></div>
             <div class="text">公司信息</div>
-            <div class="line"></div>
+            <div class="line border-1px"></div>
           </div>
           <div class="bulletin">
             <p class="content">{{seller.bulletin}}</p>
@@ -90,7 +90,7 @@ export default {
     }
   },
   created() {
-    this.iconClassMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
   }
 };
 </script>
@@ -106,6 +106,7 @@ export default {
     .content-wrapper {
       position: relative;
       display: flex;
+      font-size: 0;
       padding: 24px 12px 18px 24px;
       .avatar {
         img {
@@ -185,7 +186,7 @@ export default {
           font-size: 10px;
           vertical-align: middle;
         }
-        i {
+        .icon-keyboard_arrow_right {
           display: inline-block;
           font-size: 10px;
           margin-left: 2px;
@@ -215,7 +216,7 @@ export default {
         margin: 0 4px;
         font-size: 10px;
       }
-      i {
+      .icon-keyboard_arrow_right {
         position: absolute;
         font-size: 10px;
         right: 12px;
@@ -273,9 +274,8 @@ export default {
             .line {
               flex: 1;
               position: relative;
-              height: 1px;
-              top: 6px;
-              background-color: rgba(255, 255, 255, 0.2);
+              @include border-1px(rgba(255, 255, 255, 0.2));
+              top: -6px;
             }
             .text {
               padding: 0 12px;

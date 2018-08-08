@@ -41,6 +41,8 @@ export default {
 
   #app {
     #tab {
+      position: sticky;
+      top: 0;
       display: flex;
       width: 100%;
       height: 40px;
