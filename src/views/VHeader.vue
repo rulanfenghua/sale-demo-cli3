@@ -41,7 +41,7 @@
           </div>
           <ul v-if="seller.supports" class="supports">
             <li class="support-item" v-for="(item,index) in seller.supports" :key="index">
-              <span class="icon" :class="iconClassMap[item.type]"></span>
+              <span class="icon" :class="classMap[item.type]"></span>
               <span class="text">{{item.description}}</span>
             </li>
           </ul>
@@ -100,6 +100,7 @@ export default {
 
   .header {
     position: relative;
+    width: 100%;
     color: #fff;
     background-color: rgba(7, 17, 27, 0.5);
     overflow: hidden;

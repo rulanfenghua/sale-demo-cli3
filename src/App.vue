@@ -41,13 +41,13 @@ export default {
 
   #app {
     #tab {
-      position: sticky;
-      top: 0;
+      @include border-1px( rgba(7, 17, 27, 0.1));
+      position: relative;
       display: flex;
       width: 100%;
       height: 40px;
       line-height: 40px;
-      @include border-1px( rgba(7, 17, 27, 0.1));
+      background-color: #fff;
       a {
         flex: 1;
         text-align: center;

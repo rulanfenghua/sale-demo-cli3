@@ -60,7 +60,7 @@ export default {
       for (let index = 0; index < this.listHeight.length; index++) {
         const height1 = this.listHeight[index];
         const height2 = this.listHeight[index + 1];
-        if (!height2 || (this.scrollY >= height1 - 26 && this.scrollY < height2 - 26)) {
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
           return index;
         }
       }
@@ -83,6 +83,7 @@ export default {
   methods: {
     selectMenu(index) {
       console.log(index);
+      this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
     },
     _initScroll() {
       this.$refs.foodsWrapper.addEventListener('scroll', () => {
@@ -114,16 +115,18 @@ export default {
     top: 174px;
     bottom: 46px;
     width: 100%;
+    overflow: auto;
     .menu-wrapper {
       flex: 0 0 80px;
       background-color: #f3f5f7;
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
       .menu-item {
         display: table;
         height: 54px;
         width: 80px;
         line-height: 14px;
-        // margin: 0 auto;
         padding: 0 12px;
         &.current {
           position: relative;
@@ -173,10 +176,12 @@ export default {
     .foods-wrapper {
       flex: 1;
       overflow: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
       .title {
         position: sticky;
         top: 0;
-        z-index: 100;
+        z-index: 10;
         padding-left: 14px;
         height: 26px;
         line-height: 26px;
