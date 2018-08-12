@@ -39,9 +39,13 @@
 
 <script>
 import axios from 'axios';
+import Shopcart from '@/compoments/Shopcart.vue';
 
 export default {
   name: 'goods',
+  components: {
+    Shopcart
+  },
   props: {
     seller: {
       type: Object
@@ -52,7 +56,6 @@ export default {
       goods: [],
       listHeight: [],
       scrollY: 0
-      // selectedFood: {}
     };
   },
   computed: {
@@ -77,12 +80,12 @@ export default {
           this._calculateHeight();
         });
       }
+      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     });
-    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
   },
   methods: {
     selectMenu(index) {
-      console.log(index);
+      // console.log(index);
       this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
     },
     _initScroll() {
@@ -94,7 +97,7 @@ export default {
     _calculateHeight() {
       let foodList = this.$refs.foodList;
       let height = 0;
-      // console.dir(foodList[0]);
+      // console.dir(foodList);
       this.listHeight.push(height);
       for (let index = 0; index < foodList.length; index++) {
         const item = foodList[index];
