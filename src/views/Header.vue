@@ -28,7 +28,7 @@
     <div class="background">
       <img :src="seller.avatar" alt="" width="100%" height="100%">
     </div>
-    <transition>
+    <transition name="fade">
     <div class="detail" v-if="detailShow">
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
@@ -241,10 +241,10 @@ export default {
       height: 100%;
       overflow: auto;
       background: rgba(7, 17, 27, 0.8);
-      &.v-enter-active, &.v-leave-active {
+      &.fade-enter-active, &.fade-leave-active {
         transition: all .5s ease;
       }
-      &.v-enter, &.v-leave-to {
+      &.fade-enter, &.fade-leave-to {
         transform: translateY(10px);
         opacity: 0;
       }
