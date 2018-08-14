@@ -6,12 +6,12 @@
       <router-link to="/rating">评论</router-link>
       <router-link to="/seller">商家</router-link>
     </div>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
 <script>
-import VHeader from './views/Header.vue';
+import VHeader from './views/header.vue';
 import axios from 'axios';
 
 export default {

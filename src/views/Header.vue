@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import star from '@/components/Star.vue';
+import star from '@/components/star.vue';
 
 export default {
   name: 'v-header',
@@ -124,7 +124,7 @@ export default {
             vertical-align: top;
             width: 30px;
             height: 18px;
-            @include bg-image('VHeader/brand');
+            @include bg-image('header/brand');
             background-size: 30px 18px;
             background-repeat: no-repeat;
           }
@@ -151,19 +151,19 @@ export default {
             background-size: 12px;
             background-repeat: no-repeat;
             &.decrease {
-              @include bg-image('VHeader/decrease_1');
+              @include bg-image('header/decrease_1');
             }
             &.discount {
-              @include bg-image('VHeader/discount_1');
+              @include bg-image('header/discount_1');
             }
             &.guarantee {
-              @include bg-image('VHeader/guarantee_1');
+              @include bg-image('header/guarantee_1');
             }
             &.invoice {
-              @include bg-image('VHeader/invoice_1');
+              @include bg-image('header/invoice_1');
             }
             &.special {
-              @include bg-image('VHeader/special_1');
+              @include bg-image('header/special_1');
             }
           }
           .text {
@@ -208,7 +208,7 @@ export default {
         display: inline-block;
         width: 22px;
         height: 12px;
-        @include bg-image('VHeader/bulletin');
+        @include bg-image('header/bulletin');
         background-size: 22px 12px;
         background-repeat: no-repeat;
         vertical-align: middle;
@@ -303,19 +303,19 @@ export default {
                 background-size: 16px;
                 background-repeat: no-repeat;
                 &.decrease {
-                  @include bg-image('VHeader/decrease_2');
+                  @include bg-image('header/decrease_2');
                 }
                 &.discount {
-                  @include bg-image('VHeader/discount_2');
+                  @include bg-image('header/discount_2');
                 }
                 &.guarantee {
-                  @include bg-image('VHeader/guarantee_2');
+                  @include bg-image('header/guarantee_2');
                 }
                 &.invoice {
-                  @include bg-image('VHeader/invoice_2');
+                  @include bg-image('header/invoice_2');
                 }
                 &.special {
-                  @include bg-image('VHeader/special_2');
+                  @include bg-image('header/special_2');
                 }
               }
               .text {

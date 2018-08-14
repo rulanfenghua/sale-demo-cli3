@@ -34,18 +34,18 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryPrice="sell.deliveryPrice" :selectFoods="selectFoods" :minPrice="seller.minPrice" ref="shopcart"></shopcart>
+    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" ref="shopcart"></shopcart>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Shopcart from '@/compoments/Shopcart.vue';
+import shopcart from '@/components/shopcart.vue';
 
 export default {
   name: 'goods',
   components: {
-    Shopcart
+    shopcart
   },
   props: {
     seller: {
@@ -154,19 +154,19 @@ export default {
             background-size: 12px;
             background-repeat: no-repeat;
             &.decrease {
-              @include bg-image('Goods/decrease_3');
+              @include bg-image('goods/decrease_3');
             }
             &.discount {
-              @include bg-image('Goods/discount_3');
+              @include bg-image('goods/discount_3');
             }
             &.guarantee {
-              @include bg-image('Goods/guarantee_3');
+              @include bg-image('goods/guarantee_3');
             }
             &.invoice {
-              @include bg-image('Goods/invoice_3');
+              @include bg-image('goods/invoice_3');
             }
             &.special {
-              @include bg-image('Goods/special_3');
+              @include bg-image('goods/special_3');
             }
           }
           display: table-cell;
