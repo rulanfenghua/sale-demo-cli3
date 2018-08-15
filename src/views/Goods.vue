@@ -202,6 +202,7 @@ export default {
       .food-item {
         display: flex;
         margin: 18px;
+        padding-bottom: 18px;
         @include border-1px(rgba(7,17,27,0.1));
         &:last-child {
           &:after {
@@ -246,6 +247,11 @@ export default {
               font-size: 10px;
               color: rgb(147, 153, 159);
             }
+          }
+          .cartcontrol-wrapper {
+            position: absolute;
+            right: 0;
+            bottom: 12px;
           }
         }
       }
