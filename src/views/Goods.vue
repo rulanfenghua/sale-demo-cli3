@@ -28,6 +28,9 @@
                   <span class="now"><span class="unit">￥</span>{{food.price}}</span>
                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
@@ -41,11 +44,13 @@
 <script>
 import axios from 'axios';
 import shopcart from '@/components/shopcart.vue';
+import cartcontrol from '@/components/cartcontrol.vue';
 
 export default {
   name: 'goods',
   components: {
-    shopcart
+    shopcart,
+    cartcontrol
   },
   props: {
     seller: {
