@@ -1,8 +1,9 @@
 <template>
-  <div class="goods">
+  <div class="goods" :style="{height: clientHeight+'px'}">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li class="menu-item" v-for="(item,index) in goods" :key="index" :class="{'current':currentIndex===index}" @click="selectMenu(index)" ref="menuList">
+        <li class="menu-item" v-for="(item,index) in goods" :key="item.id" :class="{'current':currentIndex===index}" @click="selectMenu(index)"
+          ref="menuList">
           <span class="text border-1px">
             <span v-if="item.type>0" class="icon" :class="classMap[item.type]"></span>
             {{item.name}}
@@ -12,11 +13,13 @@
     </div>
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li class="food-list" v-for="(item,index) in goods" :key="index" ref="foodList">
+        <li class="food-list" v-for="item in goods" :key="item.id" ref="foodList">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li class="food-item" v-for="(food,index) in item.foods" :key="index">
-              <div class="icon"><img :src="food.icon" alt=""></div>
+            <li class="food-item" v-for="food in item.foods" :key="food.id">
+              <div class="icon">
+                <img :src="food.icon" alt="">
+              </div>
               <div class="content">
                 <h2 class="name">{{food.name}}</h2>
                 <p class="desc" v-if="food.description">{{food.description}}</p>
@@ -25,7 +28,8 @@
                   <span class="rating">好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
-                  <span class="now"><span class="unit">￥</span>{{food.price}}</span>
+                  <span class="now">
+                    <span class="unit">￥</span>{{food.price}}</span>
                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
@@ -37,7 +41,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" ref="shopcart"></shopcart>
+    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods" ref="shopcart"></shopcart>
   </div>
 </template>
 
@@ -61,22 +65,38 @@ export default {
     return {
       goods: [],
       listHeight: [],
-      scrollY: 0
+      scrollY: 0,
+      scrollTop: 0
     };
   },
   computed: {
     currentIndex() {
-      for (let index = 0; index < this.listHeight.length; index++) {
-        const height1 = this.listHeight[index];
-        const height2 = this.listHeight[index + 1];
+      for (let i = 0; i < this.listHeight.length; i++) {
+        const height1 = this.listHeight[i];
+        const height2 = this.listHeight[i + 1];
         if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
-          return index;
+          return i;
         }
       }
+    },
+    clientHeight() {
+      return (document.documentElement.clientHeight || document.body.clientHeight) - 40;
+    },
+    selectFoods() {
+      let foods = [];
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food);
+          }
+        });
+      });
+      return foods;
     }
   },
   created() {
     axios.get('/api/goods').then((response) => {
+      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
       response = response.data;
       if (response.errno === 0) {
         this.goods = response.data;
@@ -86,30 +106,41 @@ export default {
           this._calculateHeight();
         });
       }
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
     });
   },
   methods: {
     selectMenu(index) {
       // console.log(index);
+      // const that = this;
+      // this.$refs.foodsWrapper.removeEventListener('scroll', that.scroll);
       this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
+      // 先删除监听器然后添加监听器的想法失败，没能实现监听滚动完全完成
     },
     _initScroll() {
-      this.$refs.foodsWrapper.addEventListener('scroll', () => {
-        this.scrollY = this.$refs.foodsWrapper.scrollTop;
-        // console.log(this.scrollY);
-      });
+      const that = this;
+      this.$refs.foodsWrapper.addEventListener('scroll', that.scroll);
     },
     _calculateHeight() {
       let foodList = this.$refs.foodList;
       let height = 0;
       // console.dir(foodList);
       this.listHeight.push(height);
-      for (let index = 0; index < foodList.length; index++) {
-        const item = foodList[index];
-        height += item.clientHeight;
+      for (let i = 0; i < foodList.length; i++) {
+        height += foodList[i].clientHeight;
         this.listHeight.push(height);
       }
+    },
+    scroll() {
+      let scroll = 0;
+      // console.log('scrollTop:' + this.scrollTop);
+      this.scrollY = this.$refs.foodsWrapper.scrollTop;
+      // console.log(this.scrollY);
+      scroll = this.$refs.foodsWrapper.scrollTop - this.scrollTop;
+      this.scrollTop = this.$refs.foodsWrapper.scrollTop;
+      document.documentElement.scrollTop += scroll;
+      // 应该用监听TouchEvent和WheelEvent的方法与点击滚动的onscroll监听事件区分开
+      document.body.scrollTop += scroll;
+      window.pageYOffset += scroll;
     }
   }
 };
@@ -120,9 +151,9 @@ export default {
 
   .goods {
     display: flex;
-    position: fixed;
-    top: 174px;
-    bottom: 46px;
+    position: relative;
+    top: 0;
+    padding-bottom: 46px;
     width: 100%;
     overflow: auto;
     .menu-wrapper {

@@ -1,4 +1,4 @@
-const api = require('./routes/api.js');
+const api = require('./api.js');
 const bodyParser = require('body-parser');
 
 module.exports = app => {

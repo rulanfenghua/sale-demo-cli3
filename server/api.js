@@ -1,4 +1,4 @@
-const Datas = require('../resources/data.json');
+const Datas = require('./resources/data.json');
 const express = require('express');
 const router = express.Router();
 

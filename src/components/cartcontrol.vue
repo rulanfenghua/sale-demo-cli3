@@ -76,7 +76,7 @@ export default {
       line-height: 24px;
       text-align: center;
       font-size: 10px;
-      color: rgb(147, 153, 159);
+      color: rgba(147, 153, 159, 1);
     }
     .cart-add {
       display: inline-block;
