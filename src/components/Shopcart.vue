@@ -87,6 +87,11 @@ export default {
         return 'enough';
       }
     }
+  },
+  methods: {
+    drop(el) {
+      console.log(el);
+    }
   }
 };
 </script>

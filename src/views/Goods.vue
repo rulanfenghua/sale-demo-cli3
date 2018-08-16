@@ -33,7 +33,7 @@
                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" @add="addFood"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -65,9 +65,23 @@ export default {
     return {
       goods: [],
       listHeight: [],
-      scrollY: 0,
-      scrollTop: 0
+      scrollY: 0, // foodsWrapper的scrollTop
+      scrollTop: 0 // 用来记录上一次的scrollY
     };
+  },
+  created() {
+    this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+    axios.get('/api/goods').then((response) => {
+      response = response.data;
+      if (response.errno === 0) {
+        this.goods = response.data;
+        // console.log(this.goods);
+        this.$nextTick(() => {
+          this.initScroll();
+          this.calculateHeight();
+        });
+      }
+    });
   },
   computed: {
     currentIndex() {
@@ -94,33 +108,12 @@ export default {
       return foods;
     }
   },
-  created() {
-    axios.get('/api/goods').then((response) => {
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-      response = response.data;
-      if (response.errno === 0) {
-        this.goods = response.data;
-        // console.log(this.goods);
-        this.$nextTick(() => {
-          this._initScroll();
-          this._calculateHeight();
-        });
-      }
-    });
-  },
   methods: {
-    selectMenu(index) {
-      // console.log(index);
-      // const that = this;
-      // this.$refs.foodsWrapper.removeEventListener('scroll', that.scroll);
-      this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
-      // 先删除监听器然后添加监听器的想法失败，没能实现监听滚动完全完成
-    },
-    _initScroll() {
+    initScroll() {
       const that = this;
-      this.$refs.foodsWrapper.addEventListener('scroll', that.scroll);
+      this.$refs.foodsWrapper.addEventListener('scroll', that._scroll);
     },
-    _calculateHeight() {
+    calculateHeight() {
       let foodList = this.$refs.foodList;
       let height = 0;
       // console.dir(foodList);
@@ -130,7 +123,17 @@ export default {
         this.listHeight.push(height);
       }
     },
-    scroll() {
+    selectMenu(index) {
+      // console.log(index);
+      // const that = this;
+      // this.$refs.foodsWrapper.removeEventListener('scroll', that.scroll);
+      this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
+      // 先删除监听器然后添加监听器的想法失败，没能实现监听滚动完全完成
+    },
+    addFood(target) {
+      this._drop(target);
+    },
+    _scroll() {
       let scroll = 0;
       // console.log('scrollTop:' + this.scrollTop);
       this.scrollY = this.$refs.foodsWrapper.scrollTop;
@@ -141,6 +144,9 @@ export default {
       // 应该用监听TouchEvent和WheelEvent的方法与点击滚动的onscroll监听事件区分开
       document.body.scrollTop += scroll;
       window.pageYOffset += scroll;
+    },
+    _drop(target) {
+      this.$refs.shopcart.drop(target);
     }
   }
 };
