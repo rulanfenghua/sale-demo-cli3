@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight': totalCount>0}">
@@ -15,31 +15,45 @@
         <div class="pay" :class="payClass">{{payDesc}}</div>
       </div>
     </div>
-    <!-- <div class="ball-content">
+    <div class="ball-container">
+      <div v-for="ball in balls" :key="ball.id">
+        <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+        <div class="ball" v-show="ball.show">
+          <div class="inner inner-hook"></div>
+        </div>
+        </transition>
+      </div>
     </div>
-    <div class="shopcart-list">
+    <transition name="fold">
+    <div class="shopcart-list" v-show="listShow">
       <div class="list-header">
         <h1 class="title">购物车</h1>
         <span class="empty">清空</span>
       </div>
       <div class="list-content">
-        <ul>
-          <li class="food" v-for="food in selectFoods" :key="food.id">
+        <transition-group name="list" tag="ul">
+          <li class="food border-1px" v-for="food in selectFoods" :key="food.name">
             <span class="name">{{food.name}}</span>
             <div class="price"><span>￥{{food.price*food.count}}</span></div>
             <div class="cartcontrol-wrapper">
-              <cartcontrol></cartcontrol>
+              <cartcontrol @add="addFood" :food="food"></cartcontrol>
             </div>
           </li>
-        </ul>
+        </transition-group>
       </div>
-    </div> -->
+    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+import cartcontrol from '@/components/cartcontrol.vue';
+
 export default {
   name: 'shopcart',
+  components: {
+    cartcontrol
+  },
   props: {
     selectFoods: {
       type: Array,
@@ -55,6 +69,19 @@ export default {
       type: Number,
       default: 0
     }
+  },
+  data() {
+    return {
+      balls: [
+        {show: false},
+        {show: false},
+        {show: false},
+        {show: false},
+        {show: false}
+      ],
+      dropBalls: [],
+      fold: true
+    };
   },
   computed: {
     totalPrice() {
@@ -86,11 +113,64 @@ export default {
       } else {
         return 'enough';
       }
+    },
+    listShow() {
+      return (!this.fold && this.totalPrice);
     }
   },
   methods: {
+    addFood(target) {
+      this.drop(target);
+    },
+    toggleList() {
+      this.fold = !this.fold;
+    },
     drop(el) {
-      console.log(el);
+      for (let i = 0; i < this.balls.length; i++) {
+        let ball = this.balls[i];
+        if (!ball.show) {
+          ball.show = true;
+          ball.el = el;
+          this.dropBalls.push(ball);
+          return;
+        }
+      }
+    },
+    beforeDrop(el) {
+      let count = this.balls.length;
+      while (count--) {
+        let ball = this.balls[count];
+        if (ball.show) {
+          let rect = ball.el.getBoundingClientRect();
+          let x = rect.left - 32;
+          let y = -(window.innerHeight - rect.top - 22);
+          el.style.display = '';
+          el.style.webkitTransform = `translate3d(0,${y}px,0)`;
+          el.style.transform = `translate3d(0,${y}px,0)`;
+          let inner = el.querySelector('.inner-hook');
+          inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+          inner.style.transform = `translate3d(${x}px,0,0)`;
+        }
+      }
+    },
+    dropping(el, done) {
+      /* eslint-disable no-unused-vars */
+      let rf = el.offsetHeight;
+      this.$nextTick(() => {
+        el.style.webkitTransform = 'translate3d(0,0,0)';
+        el.style.transform = 'translate3d(0,0,0)';
+        let inner = el.querySelector('.inner-hook');
+        inner.style.webkitTransform = 'translate3d(0,0,0)';
+        inner.style.transform = 'translate3d(0,0,0)';
+        el.addEventListener('transitionend', done);
+      });
+    },
+    afterDrop(el) {
+      let ball = this.dropBalls.shift();
+      if (ball) {
+        ball.show = false;
+        el.style.display = 'none';
+      }
     }
   }
 };
@@ -197,13 +277,20 @@ export default {
         }
       }
     }
-    .ball-content {
+    .ball-container {
       .ball {
         position: fixed;
         left: 32px;
         bottom: 22px;
         z-index: 200;
-
+        transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41);
+        .inner {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background-color: rgb(0, 160, 220);
+          transition: all 0.4s linear;
+        }
       }
     }
     .shopcart-list {
@@ -213,9 +300,15 @@ export default {
       z-index: -1;
       width: 100%;
       transform: translate3d(0, -100%, 0);
+      &.fold-enter-active, &.fold-leave-active {
+        transition: all .5s ease;
+      }
+      &.fold-enter, &.fold-leave-to {
+        transform: translate3d(0, 0, 0);
+      }
       .list-header {
         height: 40px;
-        line-height: 40;
+        line-height: 40px;
         padding: 0 18px;
         background-color: #f3f5f7;
         border-bottom: 1px solid rgba(7, 17, 27, 0.1);
@@ -233,12 +326,23 @@ export default {
       .list-content {
         padding: 0 18px;
         max-height: 217px;
-        overflow: hidden;
+        overflow: auto;
         background-color: #fff;
         .food {
+          @include border-1px(rgba(7,17,27,0.1));
+          display: block;
           position: relative;
           padding: 12px 0;
-          @include border-1px(rgba(7,17,27,0.1));
+          /* &.list-move {
+            transition: transform 0.5s;
+          }
+          &.list-leave-active {
+            position: absolute;
+          }
+          &.list-enter, &.list-leave-to {
+            opacity: 0;
+          } */
+          // 还需要配合tweenjs做.list-content的height的缓动动画
           .name {
             line-height: 24px;
             font-size: 14px;

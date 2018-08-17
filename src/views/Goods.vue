@@ -125,10 +125,7 @@ export default {
     },
     selectMenu(index) {
       // console.log(index);
-      // const that = this;
-      // this.$refs.foodsWrapper.removeEventListener('scroll', that.scroll);
       this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
-      // 先删除监听器然后添加监听器的想法失败，没能实现监听滚动完全完成
     },
     addFood(target) {
       this._drop(target);
@@ -140,13 +137,14 @@ export default {
       // console.log(this.scrollY);
       scroll = this.$refs.foodsWrapper.scrollTop - this.scrollTop;
       this.scrollTop = this.$refs.foodsWrapper.scrollTop;
-      document.documentElement.scrollTop += scroll;
       // 应该用监听TouchEvent和WheelEvent的方法与点击滚动的onscroll监听事件区分开
-      document.body.scrollTop += scroll;
-      window.pageYOffset += scroll;
+      let t = {};
+      (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop === 'number' ? t : document.body).scrollTop += scroll;
     },
     _drop(target) {
-      this.$refs.shopcart.drop(target);
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target);
+      });
     }
   }
 };
