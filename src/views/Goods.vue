@@ -2,7 +2,7 @@
   <div class="goods" :style="{height: clientHeight+'px'}">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
-        <li class="menu-item" v-for="(item,index) in goods" :key="item.id" :class="{'current':currentIndex===index}" @click="selectMenu(index)"
+        <li class="menu-item" v-for="(item,index) in goods" :key="index" :class="{'current':currentIndex===index}" @click="selectMenu(index)"
           ref="menuList">
           <span class="text border-1px">
             <span v-if="item.type>0" class="icon" :class="classMap[item.type]"></span>
@@ -13,10 +13,10 @@
     </div>
     <div class="foods-wrapper" ref="foodsWrapper">
       <ul>
-        <li class="food-list" v-for="item in goods" :key="item.id" ref="foodList">
+        <li class="food-list" v-for="(item,index) in goods" :key="index" ref="foodList">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li class="food-item" v-for="food in item.foods" :key="food.id">
+            <li class="food-item" v-for="(food,index) in item.foods" :key="index">
               <div class="icon">
                 <img :src="food.icon" alt="">
               </div>

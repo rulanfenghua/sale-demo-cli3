@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="shopcart">
     <div class="content" @click="toggleList">
       <div class="content-left">
@@ -16,7 +17,7 @@
       </div>
     </div>
     <div class="ball-container">
-      <div v-for="ball in balls" :key="ball.id">
+      <div v-for="(ball,index) in balls" :key="index">
         <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
         <div class="ball" v-show="ball.show">
           <div class="inner inner-hook"></div>
@@ -25,10 +26,10 @@
       </div>
     </div>
     <transition name="fold">
-    <div class="shopcart-list" v-show="listShow">
+    <div class="shopcart-list" v-show="!fold">
       <div class="list-header">
         <h1 class="title">购物车</h1>
-        <span class="empty">清空</span>
+        <span class="empty" @click="clear">清空</span>
       </div>
       <div class="list-content">
         <transition-group name="list" tag="ul">
@@ -44,6 +45,10 @@
     </div>
     </transition>
   </div>
+  <transition name="fade">
+  <div class="list-mask" v-show="!fold"></div>
+  </transition>
+</div>
 </template>
 
 <script>
@@ -113,17 +118,26 @@ export default {
       } else {
         return 'enough';
       }
-    },
-    listShow() {
-      return (!this.fold && this.totalPrice);
+    }
+  },
+  watch: {
+    totalPrice() {
+      if (!this.totalPrice) {
+        this.fold = true;
+      }
     }
   },
   methods: {
     addFood(target) {
       this.drop(target);
     },
+    clear() {
+      this.selectFoods.forEach((food) => {
+        food.count = 0;
+      });
+    },
     toggleList() {
-      this.fold = !this.fold;
+      if (this.totalPrice) { this.fold = !this.fold; }
     },
     drop(el) {
       for (let i = 0; i < this.balls.length; i++) {
@@ -357,13 +371,29 @@ export default {
             font-weight: 700;
             color: rgb(240, 20, 20);
           }
-          .cartcontrol-wapper {
+          .cartcontrol-wrapper {
             position: absolute;
             right: 0;
             bottom: 6px;
           }
         }
       }
+    }
+  }
+  .list-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(7, 17, 27, 0.6);
+    &.fade-enter-active, &.fade-leave-active {
+      transition: all .5s ease;
+    }
+    &.fade-enter, &.fade-leave-to {
+      opacity: 0;
     }
   }
 </style>
