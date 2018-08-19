@@ -169,7 +169,7 @@ export default {
     },
     dropping(el, done) {
       /* eslint-disable no-unused-vars */
-      let rf = el.offsetHeight;
+      let rf = el.offsetHeight; // 触发元素节点重绘
       this.$nextTick(() => {
         el.style.webkitTransform = 'translate3d(0,0,0)';
         el.style.transform = 'translate3d(0,0,0)';

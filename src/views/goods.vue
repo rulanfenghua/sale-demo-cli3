@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="goods" :style="{height: clientHeight+'px'}">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul>
@@ -16,7 +17,7 @@
         <li class="food-list" v-for="(item,index) in goods" :key="index" ref="foodList">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li class="food-item" v-for="(food,index) in item.foods" :key="index">
+            <li class="food-item border-1px" v-for="(food,index) in item.foods" :key="index" @click="selectFood(food)">
               <div class="icon">
                 <img :src="food.icon" alt="">
               </div>
@@ -43,18 +44,22 @@
     </div>
     <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods" ref="shopcart"></shopcart>
   </div>
+  <food @add="addFood" :food="selectedFood" ref="food"></food>
+</div>
 </template>
 
 <script>
 import axios from 'axios';
 import shopcart from '@/components/shopcart.vue';
 import cartcontrol from '@/components/cartcontrol.vue';
+import food from '@/components/food.vue';
 
 export default {
   name: 'goods',
   components: {
     shopcart,
-    cartcontrol
+    cartcontrol,
+    food
   },
   props: {
     seller: {
@@ -66,7 +71,8 @@ export default {
       goods: [],
       listHeight: [],
       scrollY: 0, // foodsWrapper的scrollTop
-      scrollTop: 0 // 用来记录上一次的scrollY
+      scrollTop: 0, // 用来记录上一次的scrollY
+      selectedFood: {}
     };
   },
   created() {
@@ -126,6 +132,10 @@ export default {
     selectMenu(index) {
       // console.log(index);
       this.$refs.foodsWrapper.scrollTop = this.listHeight[index];
+    },
+    selectFood(food) {
+      this.selectedFood = food;
+      this.$refs.food.show();
     },
     addFood(target) {
       this._drop(target);
