@@ -1,54 +1,56 @@
 <template>
-<div>
-  <div class="shopcart">
-    <div class="content" @click="toggleList">
-      <div class="content-left">
-        <div class="logo-wrapper">
-          <div class="logo" :class="{'highlight': totalCount>0}">
-            <i class="icon-shopping_cart" :class="{'highlight': totalCount>0}"></i>
-          </div>
-          <div class="num" v-show="totalCount>0">{{totalCount}}</div>
-        </div>
-        <div class="price" :class="{'highlight': totalPrice>0}">￥{{totalPrice}}</div>
-        <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
-      </div>
-      <div class="content-right">
-        <div class="pay" :class="payClass">{{payDesc}}</div>
-      </div>
-    </div>
-    <div class="ball-container">
-      <div v-for="(ball,index) in balls" :key="index">
-        <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
-        <div class="ball" v-show="ball.show">
-          <div class="inner inner-hook"></div>
-        </div>
-        </transition>
-      </div>
-    </div>
-    <transition name="fold">
-    <div class="shopcart-list" v-show="!fold">
-      <div class="list-header">
-        <h1 class="title">购物车</h1>
-        <span class="empty" @click="clear">清空</span>
-      </div>
-      <div class="list-content">
-        <transition-group name="list" tag="ul">
-          <li class="food border-1px" v-for="food in selectFoods" :key="food.name">
-            <span class="name">{{food.name}}</span>
-            <div class="price"><span>￥{{food.price*food.count}}</span></div>
-            <div class="cartcontrol-wrapper">
-              <cartcontrol @add="addFood" :food="food"></cartcontrol>
+  <div>
+    <div class="shopcart">
+      <div class="content" @click="toggleList">
+        <div class="content-left">
+          <div class="logo-wrapper">
+            <div class="logo" :class="{'highlight': totalCount>0}">
+              <i class="icon-shopping_cart" :class="{'highlight': totalCount>0}"></i>
             </div>
-          </li>
-        </transition-group>
+            <div class="num" v-show="totalCount>0">{{totalCount}}</div>
+          </div>
+          <div class="price" :class="{'highlight': totalPrice>0}">￥{{totalPrice}}</div>
+          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
+        </div>
+        <div class="content-right">
+          <div class="pay" :class="payClass">{{payDesc}}</div>
+        </div>
       </div>
+      <div class="ball-container">
+        <div v-for="(ball,index) in balls" :key="index">
+          <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+            <div class="ball" v-show="ball.show">
+              <div class="inner inner-hook"></div>
+            </div>
+          </transition>
+        </div>
+      </div>
+      <transition name="fold">
+        <div class="shopcart-list" v-show="!fold">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty" @click="clear">清空</span>
+          </div>
+          <div class="list-content">
+            <transition-group name="list" tag="ul">
+              <li class="food border-1px" v-for="food in selectFoods" :key="food.name">
+                <span class="name">{{food.name}}</span>
+                <div class="price">
+                  <span>￥{{food.price*food.count}}</span>
+                </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol @add="addFood" :food="food"></cartcontrol>
+                </div>
+              </li>
+            </transition-group>
+          </div>
+        </div>
+      </transition>
     </div>
+    <transition name="fade">
+      <div class="list-mask" v-show="!fold"></div>
     </transition>
   </div>
-  <transition name="fade">
-  <div class="list-mask" v-show="!fold"></div>
-  </transition>
-</div>
 </template>
 
 <script>
@@ -107,7 +109,7 @@ export default {
       if (this.totalPrice === 0) {
         return `￥${this.minPrice}元起送`;
       } else if (this.totalPrice < this.minPrice) {
-        return `还差${this.minPrice - this.totalPrice}元起送`;
+        return `还差￥${this.minPrice - this.totalPrice}元起送`;
       } else {
         return '去结算';
       }
@@ -261,7 +263,7 @@ export default {
           font-size: 16px;
           font-weight: 700;
           &.highlight {
-            columns: #fff;
+            color: #fff;
           }
         }
         .desc {
@@ -297,7 +299,7 @@ export default {
         left: 32px;
         bottom: 22px;
         z-index: 200;
-        transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41);
+        transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
         .inner {
           width: 16px;
           height: 16px;
@@ -314,10 +316,12 @@ export default {
       z-index: -1;
       width: 100%;
       transform: translate3d(0, -100%, 0);
-      &.fold-enter-active, &.fold-leave-active {
+      &.fold-enter-active,
+      &.fold-leave-active {
         transition: all .5s ease;
       }
-      &.fold-enter, &.fold-leave-to {
+      &.fold-enter,
+      &.fold-leave-to {
         transform: translate3d(0, 0, 0);
       }
       .list-header {
@@ -343,7 +347,7 @@ export default {
         overflow: auto;
         background-color: #fff;
         .food {
-          @include border-1px(rgba(7,17,27,0.1));
+          @include border-1px(rgba(7, 17, 27, 0.1));
           display: block;
           position: relative;
           padding: 12px 0;
@@ -380,6 +384,7 @@ export default {
       }
     }
   }
+
   .list-mask {
     position: fixed;
     top: 0;
@@ -389,10 +394,12 @@ export default {
     z-index: 40;
     -webkit-backdrop-filter: blur(10px);
     background: rgba(7, 17, 27, 0.6);
-    &.fade-enter-active, &.fade-leave-active {
+    &.fade-enter-active,
+    &.fade-leave-active {
       transition: all .5s ease;
     }
-    &.fade-enter, &.fade-leave-to {
+    &.fade-enter,
+    &.fade-leave-to {
       opacity: 0;
     }
   }
