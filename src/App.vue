@@ -3,10 +3,12 @@
     <v-header :seller="seller"></v-header>
     <div id="tab" class="border-1px">
       <router-link to="/goods">商品</router-link>
-      <router-link to="/rating">评论</router-link>
+      <router-link to="/ratings">评论</router-link>
       <router-link to="/seller">商家</router-link>
     </div>
+    <keep-alive>
     <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -42,12 +44,14 @@ export default {
   #app {
     #tab {
       @include border-1px( rgba(7, 17, 27, 0.1));
-      position: relative;
+      position: sticky;
+      top: 0;
       display: flex;
       width: 100%;
       height: 40px;
       line-height: 40px;
       background-color: #fff;
+      z-index: 20;
       a {
         flex: 1;
         text-align: center;

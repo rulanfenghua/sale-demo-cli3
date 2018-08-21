@@ -72,7 +72,8 @@ export default {
       listHeight: [],
       scrollY: 0, // foodsWrapper的scrollTop
       scrollTop: 0, // 用来记录上一次的scrollY
-      selectedFood: {}
+      selectedFood: {},
+      scroll: 0
     };
   },
   created() {
@@ -148,8 +149,8 @@ export default {
       scroll = this.$refs.foodsWrapper.scrollTop - this.scrollTop;
       this.scrollTop = this.$refs.foodsWrapper.scrollTop;
       // 应该用监听TouchEvent和WheelEvent的方法与点击滚动的onscroll监听事件区分开
-      let t = {};
-      (((t = document.documentElement) || (t = document.body.parentNode)) && typeof t.scrollTop === 'number' ? t : document.body).scrollTop += scroll;
+      document.documentElement.scrollTop += scroll;
+      document.body.scrollTop += scroll;
     },
     _drop(target) {
       this.$nextTick(() => {
@@ -169,7 +170,6 @@ export default {
     top: 0;
     padding-bottom: 46px;
     width: 100%;
-    overflow: auto;
     .menu-wrapper {
       flex: 0 0 80px;
       background-color: #f3f5f7;

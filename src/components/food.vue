@@ -64,6 +64,7 @@ import Vue from 'vue';
 import cartcontrol from '@/components/cartcontrol.vue';
 import ratingselect from '@/components/ratingselect.vue';
 import split from '@/components/split.vue';
+import {formatDate} from '@/utils/date';
 
 export default {
   name: 'food',
@@ -91,12 +92,12 @@ export default {
   },
   filters: {
     formatDate(time) {
-      return time;
+      let date = new Date(time);
+      return formatDate(date, 'yyyy-MM-dd hh:mm');
     }
   },
   methods: {
     show() {
-      console.log(4);
       this.showFlag = true;
       this.selectType = 2;
       this.onlyContent = true;
@@ -142,6 +143,8 @@ export default {
     width: 100%;
     background-color: #fff;
     overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
     transform: translate3d(0, 0, 0);
     &.move-enter-active,
     &.move-leave-active {

@@ -17,3 +17,9 @@
     background-image: url('../assets/'+$url+'@3x.png');
   }
 }
+
+@mixin border-none() {
+  &:after {
+    display: none;
+  }
+}
