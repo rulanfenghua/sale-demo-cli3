@@ -27,13 +27,19 @@ export default {
     };
   },
   created() {
-    axios.get('/api/seller').then((response) => {
+    if (process.env.NODE_ENV !== 'production') {
+      axios.get('/api/seller').then((response) => {
       // console.log(response);
-      response = response.data;
-      if (response.errno === 0) {
-        this.seller = response.data;
-      }
-    });
+        response = response.data;
+        if (response.errno === 0) {
+          this.seller = response.data;
+        }
+      });
+    } else {
+      axios.get('resources/data.json').then((response) => {
+        this.seller = response.data.seller;
+      });
+    }
   }
 };
 </script>

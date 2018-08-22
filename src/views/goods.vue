@@ -78,17 +78,27 @@ export default {
   },
   created() {
     this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-    axios.get('/api/goods').then((response) => {
-      response = response.data;
-      if (response.errno === 0) {
-        this.goods = response.data;
-        // console.log(this.goods);
+    if (process.env.NODE_ENV !== 'production') {
+      axios.get('/api/goods').then((response) => {
+      // console.log(response);
+        response = response.data;
+        if (response.errno === 0) {
+          this.goods = response.data;
+          this.$nextTick(() => {
+            this.initScroll();
+            this.calculateHeight();
+          });
+        }
+      });
+    } else {
+      axios.get('resources/data.json').then((response) => {
+        this.goods = response.data.goods;
         this.$nextTick(() => {
           this.initScroll();
           this.calculateHeight();
         });
-      }
-    });
+      });
+    }
   },
   computed: {
     currentIndex() {

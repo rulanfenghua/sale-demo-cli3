@@ -81,12 +81,19 @@ export default {
     };
   },
   created() {
-    axios.get('/api/ratings').then((response) => {
-      response = response.data;
-      if (response.errno === 0) {
-        this.ratings = response.data;
-      }
-    });
+    if (process.env.NODE_ENV !== 'production') {
+      axios.get('/api/ratings').then((response) => {
+      // console.log(response);
+        response = response.data;
+        if (response.errno === 0) {
+          this.ratings = response.data;
+        }
+      });
+    } else {
+      axios.get('resources/data.json').then((response) => {
+        this.ratings = response.data.ratings;
+      });
+    }
   },
   filters: {
     formatDate(time) {
