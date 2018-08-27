@@ -8,9 +8,10 @@ module.exports = {
       }
     }
   },
+  productionSourceMap: false,
   css: {
     // Enable CSS source maps.
-    sourceMap: true
+    sourceMap: false
   },
   devServer: {
     open: true,
